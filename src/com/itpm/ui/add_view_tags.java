@@ -42,7 +42,7 @@ public class add_view_tags extends javax.swing.JFrame {
         jComboBox6 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Lecturer Management");
+        setTitle("Add/View Tags");
         setMaximumSize(new java.awt.Dimension(1368, 718));
         setMinimumSize(new java.awt.Dimension(1368, 718));
         setResizable(false);

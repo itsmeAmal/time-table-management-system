@@ -49,6 +49,7 @@ public class edit_dialog_subject extends javax.swing.JDialog {
         jSpinner5 = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Subject Management");
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
 

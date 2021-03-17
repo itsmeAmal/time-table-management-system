@@ -49,7 +49,7 @@ public class add_view_working_days_hours extends javax.swing.JFrame {
         jCheckBox8 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Working Days Management");
+        setTitle("Add/View Working Days and Hours");
         setMaximumSize(new java.awt.Dimension(1368, 718));
         setMinimumSize(new java.awt.Dimension(1368, 718));
         setResizable(false);

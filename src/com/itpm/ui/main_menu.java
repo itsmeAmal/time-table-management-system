@@ -35,7 +35,7 @@ public class main_menu extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Menu");
+        setTitle("Main Menu");
         setMaximumSize(new java.awt.Dimension(1368, 718));
         setMinimumSize(new java.awt.Dimension(1368, 718));
 

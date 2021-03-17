@@ -38,7 +38,7 @@ public class add_session extends javax.swing.JFrame {
         jComboBox2 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Lecturer Management");
+        setTitle("Add Session");
         setMinimumSize(new java.awt.Dimension(100, 100));
         setResizable(false);
 

@@ -48,6 +48,7 @@ public class add_view_student_groups extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Add/View  Student Gropus");
         setMaximumSize(new java.awt.Dimension(1368, 718));
         setMinimumSize(new java.awt.Dimension(1368, 718));
 

@@ -34,7 +34,7 @@ public class sessions_and_not_available_time_allocations_section_3 extends javax
         jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Lecturer Management");
+        setTitle("Session And Not Available Time Allocations");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));

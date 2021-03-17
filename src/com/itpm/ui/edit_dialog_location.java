@@ -41,6 +41,7 @@ public class edit_dialog_location extends javax.swing.JDialog {
         jRadioButton2 = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Location Management");
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
 

@@ -35,7 +35,7 @@ public class manage_not_availlable_times extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Lecturer Management");
+        setTitle("Manage Not Available Times");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));

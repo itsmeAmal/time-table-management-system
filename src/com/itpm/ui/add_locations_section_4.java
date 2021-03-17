@@ -34,7 +34,7 @@ public class add_locations_section_4 extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Lecturer Management");
+        setTitle("Add Locations");
         setMaximumSize(new java.awt.Dimension(32767, 32767));
         setResizable(false);
 

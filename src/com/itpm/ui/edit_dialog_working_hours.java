@@ -47,6 +47,7 @@ public class edit_dialog_working_hours extends javax.swing.JDialog {
         jCheckBox8 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Working Days And Hours Management");
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
 

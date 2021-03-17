@@ -38,6 +38,7 @@ public class edit_dialog_tag extends javax.swing.JDialog {
         jComboBox6 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Tag Management");
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
 

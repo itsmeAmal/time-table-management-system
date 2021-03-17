@@ -40,7 +40,7 @@ public class manage_session extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Lecturer Management");
+        setTitle("Managae Session");
         setMinimumSize(new java.awt.Dimension(1368, 718));
         setResizable(false);
 

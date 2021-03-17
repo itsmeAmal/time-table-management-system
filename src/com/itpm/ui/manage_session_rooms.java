@@ -39,7 +39,7 @@ public class manage_session_rooms extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Lecturer Management");
+        setTitle("Manage Session Rooms");
         setMinimumSize(new java.awt.Dimension(100, 100));
         setResizable(false);
 

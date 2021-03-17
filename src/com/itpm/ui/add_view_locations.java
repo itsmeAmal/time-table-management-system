@@ -45,7 +45,7 @@ public class add_view_locations extends javax.swing.JFrame {
         jRadioButton2 = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Lecturer Management");
+        setTitle("Add/View Locations");
         setMaximumSize(new java.awt.Dimension(1368, 718));
         setMinimumSize(new java.awt.Dimension(1368, 718));
         setResizable(false);

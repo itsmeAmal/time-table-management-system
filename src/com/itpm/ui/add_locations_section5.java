@@ -40,7 +40,7 @@ public class add_locations_section5 extends javax.swing.JFrame {
         jTextField4 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Lecturer Management");
+        setTitle("Add Locations");
         setMinimumSize(new java.awt.Dimension(100, 100));
         setResizable(false);
 

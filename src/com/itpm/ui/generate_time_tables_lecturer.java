@@ -36,7 +36,7 @@ public class generate_time_tables_lecturer extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Lecturer Management");
+        setTitle("Generate Time Table for Lecturer");
         setMinimumSize(new java.awt.Dimension(1368, 718));
         setResizable(false);
 

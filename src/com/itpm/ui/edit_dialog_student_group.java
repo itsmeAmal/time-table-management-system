@@ -44,6 +44,7 @@ public class edit_dialog_student_group extends javax.swing.JDialog {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Student Group Management");
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
 
