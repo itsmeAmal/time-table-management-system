@@ -5,18 +5,30 @@
  */
 package com.itpm.ui;
 
+import com.itpm.controller.CommonController;
+import com.itpm.controller.TagController;
+import com.itpm.core.CommonConstants;
+import com.itpm.model.Tag;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author root_user
  */
 public class edit_dialog_tag extends javax.swing.JDialog {
-
+    public static int id;
     /**
      * Creates new form edit_tag_dlg
      */
-    public edit_dialog_tag(java.awt.Frame parent, boolean modal) {
+    public edit_dialog_tag(java.awt.Frame parent, boolean modal,int tagId) {
         super(parent, modal);
         initComponents();
+        this.id=tagId;
+        showDetails();
     }
 
     /**
@@ -29,25 +41,25 @@ public class edit_dialog_tag extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        txtTagName = new javax.swing.JTextField();
+        txtTagCode = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
-        jComboBox6 = new javax.swing.JComboBox<>();
+        comboRelatedTag = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tag Management");
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txtTagName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        jTextField2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtTagCode.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txtTagCode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtTagCodeActionPerformed(evt);
             }
         });
 
@@ -62,8 +74,13 @@ public class edit_dialog_tag extends javax.swing.JDialog {
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton4.setText("Update");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
-        jComboBox6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        comboRelatedTag.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -79,9 +96,9 @@ public class edit_dialog_tag extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(comboRelatedTag, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTagCode, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTagName, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -89,16 +106,16 @@ public class edit_dialog_tag extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(42, 42, 42)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTagName, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTagCode, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboRelatedTag, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(39, 39, 39)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(52, Short.MAX_VALUE))
@@ -116,12 +133,55 @@ public class edit_dialog_tag extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtTagCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTagCodeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtTagCodeActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        updateTag();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void updateTag(){
+      
+        try {
+             if(txtTagName.getText().trim()==null|txtTagName.getText().trim().equalsIgnoreCase("")){
+           JOptionPane.showMessageDialog(this, "Please Enter tag name", "Error !", JOptionPane.ERROR_MESSAGE);
+        }
+             if(txtTagCode.getText().trim()==null|txtTagCode.getText().trim().equalsIgnoreCase("")){
+           JOptionPane.showMessageDialog(this, "Please Enter tag code", "Error !", JOptionPane.ERROR_MESSAGE);
+        }
+        if(comboRelatedTag.getSelectedItem().toString().trim()==null|comboRelatedTag.getSelectedItem().toString().trim().equalsIgnoreCase("")){
+            JOptionPane.showMessageDialog(this, "Please  select related tag", "Error !", JOptionPane.ERROR_MESSAGE);
+        }
+       
+        boolean   status = TagController.updateTag(Integer.parseInt(txtTagCode.getText().trim()),txtTagName.getText().trim(),comboRelatedTag.getSelectedItem().toString().trim());
+            if(status){
+            JOptionPane.showMessageDialog(this, "tag Updated Succesfully","Sucess !",JOptionPane.INFORMATION_MESSAGE);
+        }
+        } catch (SQLException ex) {
+            Logger.getLogger(edit_dialog_tag.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void showDetails() {
+        try {
+           
+            String condition=CommonConstants.equal;
+            Tag tag=TagController.getTagObjectByTagId(id,"tag_code", condition);
+            txtTagCode.setText(Integer.toString(tag.getTagCode()));
+            txtTagName.setText(tag.getTagName());
+            CommonController.loadDataToCombo(comboRelatedTag,"tag_related_name");
+            comboRelatedTag.setSelectedItem(tag.getRelatedTag());
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(edit_dialog_tag.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
     /**
      * @param args the command line arguments
      */
@@ -153,7 +213,7 @@ public class edit_dialog_tag extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                edit_dialog_tag dialog = new edit_dialog_tag(new javax.swing.JFrame(), true);
+                edit_dialog_tag dialog = new edit_dialog_tag(new javax.swing.JFrame(), true,id);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -166,13 +226,13 @@ public class edit_dialog_tag extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> comboRelatedTag;
     private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox6;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField txtTagCode;
+    private javax.swing.JTextField txtTagName;
     // End of variables declaration//GEN-END:variables
 }
