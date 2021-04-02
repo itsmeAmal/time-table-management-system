@@ -15,10 +15,12 @@
             <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/ui/edit_dialog_tag.java</file>
             <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/ui/manage_not_available_time_menu.java</file>
             <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/ui/edit_dialog_student_group.java</file>
+            <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/dao/SubjectDao.java</file>
             <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/model/Tag.java</file>
             <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/model/Student.java</file>
             <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/ui/add_parallel_sessions.java</file>
             <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/ui/add_view_not_available_times_of_lecturers_groups_subgroups.java</file>
+            <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/dao/LocationDao.java</file>
             <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/ui/generate_time_tables_location.java</file>
             <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/ui/statistic.java</file>
             <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/ui/add_locations_for_sessions.java</file>
@@ -48,6 +50,7 @@
             <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/ui/main_menu.java</file>
             <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/ui/sessions_and_not_available_time_allocations_section_3.java</file>
             <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/controller/SubjectController.java</file>
+            <file>file:/C:/Users/Anjula/Documents/NetBeansProjects/time-table-management-system/src/com/itpm/dao/selectQuery.java</file>
         </group>
     </open-files>
 </project-private>

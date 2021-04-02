@@ -209,13 +209,10 @@ public class add_view_tags extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         
-        int id=getSeletedRowId();
+        int selectedTag = tblTag.getSelectedRow();
+        int id= CommonController.getSelectedRowsid(selectedTag,tblTag);
         new edit_dialog_tag(this, true, id).setVisible(true);
-          // int id = Validations.getIntOrZeroFromString(tblCustomers.getValueAt(selectedItem, 0).toString());
-      
-           
-        
-        
+          // int id = Validations.getIntOrZeroFromString(tblCustomers.getValueAt(selectedItem, 0).toString( 
     
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -232,11 +229,6 @@ public class add_view_tags extends javax.swing.JFrame {
         deleteTag();
     }//GEN-LAST:event_jButton5ActionPerformed
     
-    private int getSeletedRowId(){
-        int selectedTag = tblTag.getSelectedRow();
-        int id= CommonController.getSelectedRowsid(selectedTag,tblTag);
-        return id;
-    }
     private void addTag(){
     
         try {
@@ -261,7 +253,7 @@ public class add_view_tags extends javax.swing.JFrame {
     private void deleteTag(){
         
         try {
-            int id=getSeletedRowId();
+            int id=CommonController.getSelectedRowsid(tblTag.getSelectedRow(),tblTag);
             boolean status= TagController.deleteTag(id);
             if(status){
                 JOptionPane.showMessageDialog(this,"Tag Removed Successfully","Sucess !",JOptionPane.INFORMATION_MESSAGE);

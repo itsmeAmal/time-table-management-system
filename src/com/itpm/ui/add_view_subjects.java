@@ -5,7 +5,13 @@
  */
 package com.itpm.ui;
 
+import com.itpm.controller.CommonController;
 import com.itpm.controller.SubjectController;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,6 +24,7 @@ public class add_view_subjects extends javax.swing.JFrame {
      */
     public add_view_subjects() {
         initComponents();
+        
     }
 
     /**
@@ -42,7 +49,7 @@ public class add_view_subjects extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblSubjects = new javax.swing.JTable();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         txtSubjectName = new javax.swing.JTextField();
@@ -90,6 +97,11 @@ public class add_view_subjects extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton2.setText("Clear");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton3.setText("Save");
@@ -99,23 +111,27 @@ public class add_view_subjects extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblSubjects.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "id", "Subject Name", "Subject Code", "Offerd Year", "Offered Semester"
+                "id", "Subject Name", "Subject Code", "Offerd Year", "Offered Semester", "Lecture Hours", "Tutorial Hours", "Lab Hours", "Evaluation Hours"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setMinWidth(0);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
-            jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
+        jScrollPane1.setViewportView(tblSubjects);
+        if (tblSubjects.getColumnModel().getColumnCount() > 0) {
+            tblSubjects.getColumnModel().getColumn(0).setMinWidth(0);
+            tblSubjects.getColumnModel().getColumn(0).setPreferredWidth(0);
+            tblSubjects.getColumnModel().getColumn(0).setMaxWidth(0);
+            tblSubjects.getColumnModel().getColumn(1).setResizable(false);
+            tblSubjects.getColumnModel().getColumn(2).setResizable(false);
+            tblSubjects.getColumnModel().getColumn(3).setResizable(false);
+            tblSubjects.getColumnModel().getColumn(4).setResizable(false);
+            tblSubjects.getColumnModel().getColumn(5).setResizable(false);
+            tblSubjects.getColumnModel().getColumn(6).setResizable(false);
+            tblSubjects.getColumnModel().getColumn(7).setResizable(false);
+            tblSubjects.getColumnModel().getColumn(8).setResizable(false);
         }
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -261,28 +277,71 @@ public class add_view_subjects extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        
+        try {
+         ResultSet    rs = SubjectController.getAllSubjects();
+         String[]columnList={"subject_name","subject_code","subject_offered_year","subject_offered_semester","subject_lecture_hours_amount","subject_tutorial_hours","subject_lab_hours","subject_evaluation_hours"};
+         CommonController.loadDataToTable(tblSubjects, rs, columnList);
+        } catch (SQLException ex) {
+            Logger.getLogger(add_view_subjects.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        int selectedRow=tblSubjects.getSelectedRow();
+        int id=CommonController.getSelectedRowsid(selectedRow,tblSubjects);
         new edit_dialog_subject(new javax.swing.JFrame(), true).setVisible(true);
+        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         addSubject();
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void addSubject(){
-        int offeredSemester=0;
-        if(radioSemster1.isSelected()){
-           offeredSemester=1;
-        }
-        if(radioSemster2.isSelected()){
-            offeredSemester=2;
-        }
-       
-       // boolean status=SubjectController.addSubject(Integer.parseInt(txtSubjectCode.getText().trim()),txtSubjectName.getText().trim(),Integer.parseInt(comboOfferedYear.getSelectedItem().toString().trim()),offeredSemester,Integer.parseInt(spinnerLectuerHours.getValue().toString()),Integer.parseInt(spinnerTutorialHours.getValue().toString()),Integer.parseInt(spinnerLabHours.getValue().toString()),Integer.parseInt(spinnerEvaluationHours.getValue().toString()));
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        clearSubjectDetails();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void clearSubjectDetails(){
+        comboOfferedYear.setSelectedIndex(-1);
+        txtSubjectCode.setText("");
+        txtSubjectName.setText("");
+        spinnerLectuerHours.setValue(Integer.valueOf(0));
+        spinnerTutorialHours.setValue(Integer.valueOf(0));
+        spinnerLabHours.setValue(Integer.valueOf(0));
+        spinnerEvaluationHours.setValue(0);  
+        radioSemster1.setSelected(false);
+        radioSemster2.setSelected(false);
         
+    }
+    private void addSubject(){
+        try {
+             int offeredSemester=0;
+            if(radioSemster1.isSelected()){
+                offeredSemester=1;
+            }
+            if(radioSemster2.isSelected()){
+                offeredSemester=2;
+            }
+            if(comboOfferedYear.getSelectedIndex()==-1){
+                JOptionPane.showMessageDialog(this,"Please select the subject offered Year","Error !!",JOptionPane.ERROR_MESSAGE);
+            }
+            if(txtSubjectName.getText().trim()==null|txtSubjectName.getText().trim().equalsIgnoreCase("")){
+                JOptionPane.showMessageDialog(this,"Please Enter Subject Name");
+            }
+            if(txtSubjectCode.getText().trim()==null|txtSubjectCode.getText().trim().equalsIgnoreCase("")){
+                JOptionPane.showMessageDialog(this,"Please Enter the Suject Code","Error !",JOptionPane.ERROR_MESSAGE);
+            }
+            
+            boolean status = SubjectController.addSubject(txtSubjectCode.getText().trim(),txtSubjectName.getText().trim(),Integer.parseInt(comboOfferedYear.getSelectedItem().toString().trim()),offeredSemester,Integer.parseInt(spinnerLectuerHours.getValue().toString()),Integer.parseInt(spinnerTutorialHours.getValue().toString()),Integer.parseInt(spinnerLabHours.getValue().toString()),Integer.parseInt(spinnerEvaluationHours.getValue().toString()));
+            if(status){
+                JOptionPane.showMessageDialog(this,"Subject Added Sucessfully!!!!","sucess !",JOptionPane.INFORMATION_MESSAGE);
+            } 
+        } catch (SQLException ex) {
+            Logger.getLogger(add_view_subjects.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
     }
     /**
      * @param args the command line arguments
@@ -398,13 +457,13 @@ public class add_view_subjects extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JRadioButton radioSemster1;
     private javax.swing.JRadioButton radioSemster2;
     private javax.swing.JSpinner spinnerEvaluationHours;
     private javax.swing.JSpinner spinnerLabHours;
     private javax.swing.JSpinner spinnerLectuerHours;
     private javax.swing.JSpinner spinnerTutorialHours;
+    private javax.swing.JTable tblSubjects;
     private javax.swing.JTextField txtSubjectCode;
     private javax.swing.JTextField txtSubjectName;
     // End of variables declaration//GEN-END:variables
