@@ -5,7 +5,7 @@
  */
 package com.itpm.controller;
 
-import com.itpm.dao.TagDao;
+import com.itpm.dao.impl.TagDaoImpl;
 import com.itpm.model.Tag;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,11 +21,11 @@ public class TagController {
         tag.setTagCode(code);
         tag.setTagName(tagName);
         tag.setRelatedTag(relatedTag);
-        return new TagDao().addTag(tag);
+        return new TagDaoImpl().addTag(tag);
     }
     
     public static  ResultSet getAllTags() throws SQLException {
-        return  new TagDao().getAllTags();
+        return  new TagDaoImpl().getAllTags();
     }
      
    public static boolean updateTag(int code,String tagName,String relatedTag) throws SQLException{
@@ -33,14 +33,14 @@ public class TagController {
        tag.setTagCode(code);
        tag.setTagName(tagName);
        tag.setRelatedTag(relatedTag);
-       return new TagDao().updateTag(tag);
+       return new TagDaoImpl().updateTag(tag);
    } 
    
    public static boolean deleteTag(int code) throws SQLException{
-       return new TagDao().deleteTag(code);
+       return new TagDaoImpl().deleteTag(code);
    }
    public static Tag  getTagObjectByTagId(int id,String attribute,String condition) throws SQLException{
-       ResultSet rs= new TagDao().getTagObjectByTagId(id,attribute,condition);
+       ResultSet rs= new TagDaoImpl().getTagObjectByTagId(id,attribute,condition);
        Tag tag=new Tag();
        while(rs.next()){
        tag.setTagCode(rs.getInt("tag_code"));

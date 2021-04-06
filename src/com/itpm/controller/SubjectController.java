@@ -5,7 +5,7 @@
  */
 package com.itpm.controller;
 
-import com.itpm.dao.SubjectDao;
+import com.itpm.dao.impl.SubjectDaoImpl;
 import com.itpm.model.Subject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,11 +25,11 @@ public class SubjectController {
     subject.setLectureHours(lectureHours);
     subject.setTutorialHours(tutorialHours);
     subject.setEvaluationHours(evaluationHours);
-    return new SubjectDao().addSubject(subject);
+    return new SubjectDaoImpl().addSubject(subject);
         
     }
 
     public static ResultSet getAllSubjects() throws SQLException{
-        return new SubjectDao().getAllSubjects();
+        return new SubjectDaoImpl().getAllSubjects();
     }
 }

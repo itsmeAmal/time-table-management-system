@@ -16,14 +16,15 @@ import java.util.logging.Logger;
  * @author Anjula
  */
 public class DatabaseConnection {
-    
-    private static Connection con=null;
-    
-    public static Connection databaseConnection() throws SQLException{
+
+    private static Connection con = null;
+
+    public static Connection databaseConnection() throws SQLException {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con=(Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/time_table_management", "root", "");
-        } catch (ClassNotFoundException |InstantiationException |IllegalAccessException ex) {
+            con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/time_table_management", "root", "1234");
+//            con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/time_table_management", "root", "");
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
         return con;

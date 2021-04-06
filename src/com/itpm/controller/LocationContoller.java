@@ -5,7 +5,7 @@
  */
 package com.itpm.controller;
 
-import com.itpm.dao.LocationDao;
+import com.itpm.dao.impl.LocationDaoImpl;
 import com.itpm.model.Location;
 import java.sql.SQLException;
 
@@ -21,6 +21,6 @@ public class LocationContoller {
         location.setRoom(room);
         location.setRoomCapacity(roomCapacity);
         location.setRoomType(roomType);
-        return new LocationDao().addLocation(location);
+        return new LocationDaoImpl().addLocation(location);
     }
 }

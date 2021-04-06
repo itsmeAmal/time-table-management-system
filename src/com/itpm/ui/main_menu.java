@@ -49,7 +49,6 @@ public class main_menu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Main Menu");
-        setMaximumSize(new java.awt.Dimension(1368, 718));
         setMinimumSize(new java.awt.Dimension(100, 100));
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));

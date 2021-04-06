@@ -5,8 +5,8 @@
  */
 package com.itpm.controller;
 
-import com.itpm.dao.CommonDao;
-import com.itpm.dao.TagDao;
+import com.itpm.dao.impl.CommonDaoImpl;
+import com.itpm.dao.impl.TagDaoImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JComboBox;
@@ -51,7 +51,7 @@ public class CommonController {
     }
     
     public static void loadDataToCombo(JComboBox comboBox,String attribute) throws SQLException{
-       ResultSet rs=new TagDao().getDataToCombo(attribute); 
+       ResultSet rs=new TagDaoImpl().getDataToCombo(attribute); 
        System.out.println(rs);
        
        while(rs.next()){

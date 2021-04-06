@@ -5,35 +5,15 @@
  */
 package com.itpm.dao;
 
-import com.itpm.connection.DatabaseConnection;
 import com.itpm.model.Subject;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
  *
- * @author Anjula
+ * @author root_user
  */
-public class SubjectDao {
-    String selectQuery="select * from subjects";
-    public boolean addSubject(Subject subject) throws SQLException{
-        Connection con=DatabaseConnection.databaseConnection();
-        PreparedStatement ps=con.prepareStatement("insert into subjects(subject_code,subject_evaluation_hours,subject_lab_hours,subject_lecture_hours_amount,subject_name,subject_offered_semester,subject_offered_year,subject_tutorial_hours)values(?,?,?,?,?,?,?,?)");
-        ps.setString(1, subject.getSubjectCode());
-        ps.setInt(2,subject.getEvaluationHours());
-        ps.setInt(3, subject.getLabHours());
-        ps.setInt(4, subject.getLectureHours());
-        ps.setString(5, subject.getSubjectName());
-        ps.setInt(6, subject.getOfferedSemester());
-        ps.setInt(7, subject.getOfferedYear());
-        ps.setInt(8, subject.getTutorialHours());
-        ps.executeUpdate();
-        ps.close();
-        return true;
-    }
-    public ResultSet getAllSubjects() throws SQLException{
-        return CommonDao.getAllRecords(selectQuery);
-    }
+public interface SubjectDao {
+
+    public boolean addSubject(Subject subject) throws SQLException;
+
 }
