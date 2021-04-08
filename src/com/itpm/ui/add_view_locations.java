@@ -5,17 +5,94 @@
  */
 package com.itpm.ui;
 
+import com.itpm.controller.CommonController;
+import com.itpm.core.Validations;
+import com.itpm.dao.impl.LocationDaoImpl;
+import com.itpm.model.Location;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Anjula
  */
 public class add_view_locations extends javax.swing.JFrame {
 
+    int id;
+
     /**
      * Creates new form A
      */
     public add_view_locations() {
         initComponents();
+        loadDataToTable();
+    }
+
+    private void addLocation() {
+        try {
+            Location location = new Location();
+            location.setBuildingName(comboBuildingName.getSelectedItem().toString());
+            location.setRoomCapacity(Validations.getIntOrZeroFromString(txtCapacity.getText().trim()));
+            location.setRoomName(txtRoomName.getText().trim());
+            location.setRoomType(comboRoomType.getSelectedItem().toString());
+            boolean status = new LocationDaoImpl().addLocation(location);
+            if (status) {
+                JOptionPane.showMessageDialog(this, "Location created successfully !");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(add_view_locations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void deleteLocation() {
+        int selectedRaw = tblLocations.getSelectedRow();
+        if (selectedRaw != -1) {
+            try {
+                DefaultTableModel dtm = (DefaultTableModel) tblLocations.getModel();
+                new LocationDaoImpl().deleteLocation(Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 0).toString()));
+            } catch (SQLException ex) {
+                Logger.getLogger(add_view_locations.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void loadDataToTable() {
+        try {
+            ResultSet rset = new LocationDaoImpl().getAllLocations();
+            String columnList[] = {"room_id", "room_related_building_name", "room_name", "room_type", "room_capacity"};
+            CommonController.loadDataToTable(tblLocations, rset, columnList);
+        } catch (SQLException ex) {
+            Logger.getLogger(add_view_locations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void clearData() {
+        id = 0;
+        comboBuildingName.setSelectedItem("");
+        txtRoomName.setText("");
+        comboRoomType.setSelectedItem("");
+        txtCapacity.setText("");
+    }
+
+    private void updateLocation() {
+        try {
+            Location location = new Location();
+            location.setBuildingName(comboBuildingName.getSelectedItem().toString());
+            location.setRoomCapacity(Validations.getIntOrZeroFromString(txtCapacity.getText().trim()));
+            location.setRoomName(txtRoomName.getText().trim());
+            location.setRoomType(comboRoomType.getSelectedItem().toString());
+            location.setRoomId(id);
+            boolean status = new LocationDaoImpl().updateLocation(location);
+            if (status) {
+                JOptionPane.showMessageDialog(this, "Location updated successfully !");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(add_view_locations.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -28,31 +105,27 @@ public class add_view_locations extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        txtBuildingName = new javax.swing.JTextField();
         txtRoomName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         txtCapacity = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btDelete = new javax.swing.JButton();
+        btSave = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        radioLectureHall = new javax.swing.JRadioButton();
-        radioLaboratory = new javax.swing.JRadioButton();
+        tblLocations = new javax.swing.JTable();
+        btUpdate = new javax.swing.JButton();
+        comboBuildingName = new javax.swing.JComboBox<>();
+        comboRoomType = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Add/View Locations");
-        setMaximumSize(new java.awt.Dimension(1368, 718));
-        setMinimumSize(new java.awt.Dimension(1368, 718));
+        setTitle("Manage Locations");
+        setMaximumSize(new java.awt.Dimension(1143, 734));
+        setMinimumSize(new java.awt.Dimension(1143, 734));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
-
-        txtBuildingName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
         txtRoomName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txtRoomName.addActionListener(new java.awt.event.ActionListener() {
@@ -75,52 +148,67 @@ public class add_view_locations extends javax.swing.JFrame {
 
         txtCapacity.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton2.setText("Clear");
-
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton3.setText("Save");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btDelete.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btDelete.setText("DELETE");
+        btDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btDeleteActionPerformed(evt);
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        btSave.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btSave.setText("SAVE");
+        btSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSaveActionPerformed(evt);
+            }
+        });
+
+        tblLocations.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
                 "ID", "Building", "Room", "Room Type", "Capacity"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setMinWidth(0);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
-            jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblLocations.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblLocationsMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblLocations);
+        if (tblLocations.getColumnModel().getColumnCount() > 0) {
+            tblLocations.getColumnModel().getColumn(0).setMinWidth(0);
+            tblLocations.getColumnModel().getColumn(0).setPreferredWidth(0);
+            tblLocations.getColumnModel().getColumn(0).setMaxWidth(0);
+            tblLocations.getColumnModel().getColumn(1).setResizable(false);
+            tblLocations.getColumnModel().getColumn(2).setResizable(false);
+            tblLocations.getColumnModel().getColumn(3).setResizable(false);
+            tblLocations.getColumnModel().getColumn(4).setResizable(false);
         }
 
-        jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton4.setText("Update");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btUpdate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btUpdate.setText("UPDATE");
+        btUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btUpdateActionPerformed(evt);
             }
         });
 
-        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton5.setText("View");
+        comboBuildingName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        comboBuildingName.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Building 1", "Building 2", "Building 3 " }));
 
-        radioLectureHall.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        radioLectureHall.setText("Lecture Hall");
-
-        radioLaboratory.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        radioLaboratory.setText("Laboratory");
+        comboRoomType.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        comboRoomType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lecture Hall", "Laboratory" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -129,76 +217,63 @@ public class add_view_locations extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1308, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(72, 72, 72)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtBuildingName)
-                                    .addComponent(txtRoomName)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(radioLectureHall)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(radioLaboratory)))
-                                .addGap(218, 218, 218))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)))
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(37, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(72, 72, 72)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtCapacity)
+                            .addComponent(txtRoomName)
+                            .addComponent(comboBuildingName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(comboRoomType, javax.swing.GroupLayout.Alignment.TRAILING, 0, 245, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 642, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtBuildingName, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtRoomName, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(49, 49, 49)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(radioLectureHall, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(radioLaboratory, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(47, 47, 47)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboBuildingName, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtRoomName, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboRoomType, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(25, 25, 25)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(52, 52, 52)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 662, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,17 +288,36 @@ public class add_view_locations extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtRoomNameActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-       new edit_dialog_location(new javax.swing.JFrame(), true).setVisible(true);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void btUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUpdateActionPerformed
+        updateLocation();
+        loadDataToTable();
+        clearData();
+    }//GEN-LAST:event_btUpdateActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveActionPerformed
         addLocation();
-    }//GEN-LAST:event_jButton3ActionPerformed
+        loadDataToTable();
+        clearData();
+    }//GEN-LAST:event_btSaveActionPerformed
 
-    private void addLocation(){
-        
-    }
+    private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
+        deleteLocation();
+        loadDataToTable();
+        clearData();
+    }//GEN-LAST:event_btDeleteActionPerformed
+
+    private void tblLocationsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationsMouseClicked
+        int selectedRaw = tblLocations.getSelectedRow();
+        if (selectedRaw != -1) {
+            DefaultTableModel dtm = (DefaultTableModel) tblLocations.getModel();
+            id = Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 0).toString());
+            comboBuildingName.setSelectedItem(dtm.getValueAt(selectedRaw, 1).toString());
+            txtRoomName.setText(dtm.getValueAt(selectedRaw, 2).toString());
+            comboRoomType.setSelectedItem(dtm.getValueAt(selectedRaw, 3).toString());
+            txtCapacity.setText(dtm.getValueAt(selectedRaw, 4).toString());
+        }
+    }//GEN-LAST:event_tblLocationsMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -291,20 +385,18 @@ public class add_view_locations extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton btDelete;
+    private javax.swing.JButton btSave;
+    private javax.swing.JButton btUpdate;
+    private javax.swing.JComboBox<String> comboBuildingName;
+    private javax.swing.JComboBox<String> comboRoomType;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JRadioButton radioLaboratory;
-    private javax.swing.JRadioButton radioLectureHall;
-    private javax.swing.JTextField txtBuildingName;
+    private javax.swing.JTable tblLocations;
     private javax.swing.JTextField txtCapacity;
     private javax.swing.JTextField txtRoomName;
     // End of variables declaration//GEN-END:variables

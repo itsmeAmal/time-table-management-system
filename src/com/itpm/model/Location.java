@@ -15,37 +15,76 @@ public class Location {
     private String roomName;
     private String roomType;
     private int roomCapacity;
+    private int roomId;
 
+    /**
+     * @return the buildingName
+     */
     public String getBuildingName() {
         return buildingName;
     }
 
+    /**
+     * @param buildingName the buildingName to set
+     */
     public void setBuildingName(String buildingName) {
         this.buildingName = buildingName;
     }
 
-    public String getRoom() {
+    /**
+     * @return the roomName
+     */
+    public String getRoomName() {
         return roomName;
     }
 
-    public void setRoom(String room) {
-        this.roomName = room;
+    /**
+     * @param roomName the roomName to set
+     */
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
+    /**
+     * @return the roomType
+     */
     public String getRoomType() {
         return roomType;
     }
 
+    /**
+     * @param roomType the roomType to set
+     */
     public void setRoomType(String roomType) {
         this.roomType = roomType;
     }
 
+    /**
+     * @return the roomCapacity
+     */
     public int getRoomCapacity() {
         return roomCapacity;
     }
 
+    /**
+     * @param roomCapacity the roomCapacity to set
+     */
     public void setRoomCapacity(int roomCapacity) {
         this.roomCapacity = roomCapacity;
+    }
+
+    /**
+     * @return the roomId
+     */
+    public int getRoomId() {
+        return roomId;
+    }
+
+    /**
+     * @param roomId the roomId to set
+     */
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 
 }
