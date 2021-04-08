@@ -20,7 +20,7 @@ public class LocationDaoImpl implements LocationDao{
     
     @Override
     public  boolean addLocation(Location location) throws SQLException{
-       Connection con=DatabaseConnection.databaseConnection();
+       Connection con=DatabaseConnection.getDatabaseConnection();
        PreparedStatement ps=con.prepareStatement("insert into rooms(room_id,room_type,room_capacity,room_related_building_id) values(?,?,?,?)");
        ps.setString(0, location.getRoom());
        ps.setString(1, location.getRoomType());

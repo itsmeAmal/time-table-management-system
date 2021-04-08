@@ -13,5 +13,33 @@ public class Lecturer {
     
     private int lecturerId;
     private String lectuerName;
-    
+
+    /**
+     * @return the lecturerId
+     */
+    public int getLecturerId() {
+        return lecturerId;
+    }
+
+    /**
+     * @param lecturerId the lecturerId to set
+     */
+    public void setLecturerId(int lecturerId) {
+        this.lecturerId = lecturerId;
+    }
+
+    /**
+     * @return the lectuerName
+     */
+    public String getLectuerName() {
+        return lectuerName;
+    }
+
+    /**
+     * @param lectuerName the lectuerName to set
+     */
+    public void setLectuerName(String lectuerName) {
+        this.lectuerName = lectuerName;
+    }
+   
 }

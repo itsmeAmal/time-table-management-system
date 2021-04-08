@@ -5,12 +5,11 @@
  */
 package com.itpm.controller;
 
-import com.itpm.dao.impl.CommonDaoImpl;
-import com.itpm.dao.impl.TagDaoImpl;
+import com.itpm.core.Validations;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -19,43 +18,71 @@ import javax.swing.table.DefaultTableModel;
  * @author Anjula
  */
 public class CommonController {
-    
-    public static void loadDataToTable(JTable table,ResultSet rs,String[]columnList) throws SQLException{
-        DefaultTableModel dtm1=(DefaultTableModel)table.getModel();
-        int rw=dtm1.getRowCount();
-        for(int i=0;i<rw;i++){
+
+    public static void loadDataToDetailTable(JTable table, ResultSet rst, String[] columnList, String column1,
+            String column2) throws SQLException {
+        BigDecimal value1 = BigDecimal.ZERO;
+        BigDecimal value2 = BigDecimal.ZERO;
+        DefaultTableModel dtm1 = (DefaultTableModel) table.getModel();
+        int rw = dtm1.getRowCount();
+        for (int i = 0; i < rw; i++) {
             dtm1.removeRow(0);
         }
-        while (rs.next()) {
-            Object[] rowCells = new Object[columnList.length];
+        while (rst.next()) {
+            Object[] rowCells = new Object[columnList.length + 1];
             for (int i = 0; i < columnList.length; i++) {
-                rowCells[i] = rs.getString(columnList[i]);
+                rowCells[i] = rst.getString(columnList[i]);
+                if (i == columnList.length - 1) {
+                    value1 = Validations.getBigDecimalFromString(rst.getString(column1));
+                    value2 = Validations.getBigDecimalFromString(rst.getString(column2));
+                    rowCells[i + 1] = Validations.formatWithTwoDigits(value1.multiply(value2).toString());
+                }
             }
             dtm1.addRow(rowCells);
         }
-        rs.getStatement().close();
-        rs.close();
+
     }
-    
-    public static int getSelectedRowsid(int selectedRow,JTable table){
-        int id = 0;
-        if (selectedRow != -1) {
-          // int id = Validations.getIntOrZeroFromString(tblCustomers.getValueAt(selectedItem, 0).toString());
-             id = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());
+
+    public static void removeAllRowsFromTable(JTable table) {
+        DefaultTableModel dtm1 = (DefaultTableModel) table.getModel();
+        int rw = dtm1.getRowCount();
+        for (int i = 0; i < rw; i++) {
+            dtm1.removeRow(0);
         }
-        else{
-            
-            JOptionPane.showMessageDialog(table,"Please select a row","Error !", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void loadDataToTable(JTable table, ResultSet rst, String[] columnList) throws SQLException {
+        DefaultTableModel dtm1 = (DefaultTableModel) table.getModel();
+        int rw = dtm1.getRowCount();
+        for (int i = 0; i < rw; i++) {
+            dtm1.removeRow(0);
         }
-      return id;  
+        while (rst.next()) {
+            Object[] rowCells = new Object[columnList.length];
+            for (int i = 0; i < columnList.length; i++) {
+                rowCells[i] = rst.getString(columnList[i]);
+            }
+            dtm1.addRow(rowCells);
+        }
+        rst.getStatement().close();
+        rst.close();
     }
-    
-    public static void loadDataToCombo(JComboBox comboBox,String attribute) throws SQLException{
-       ResultSet rs=new TagDaoImpl().getDataToCombo(attribute); 
-       System.out.println(rs);
-       
-       while(rs.next()){
-           comboBox.addItem(rs.getString(attribute));
-       }
+
+    public static void loadDataToComboBox(JComboBox comboBox, ResultSet rst, String attribute) throws SQLException {
+        comboBox.removeAllItems();
+        while (rst.next()) {
+            comboBox.addItem(rst.getString(attribute));
+        }
     }
+
+    public static java.sql.Date getCurrentJavaSqlDate() {
+        java.util.Date today = new java.util.Date();
+        return new java.sql.Date(today.getTime());
+    }
+
+    public static java.sql.Time getCurrentJavaSqlTime() {
+        java.util.Date date = new java.util.Date();
+        return new java.sql.Time(date.getTime());
+    }
+
 }

@@ -23,7 +23,7 @@ public class SubjectDaoImpl implements SubjectDao {
 
     @Override
     public boolean addSubject(Subject subject) throws SQLException {
-        Connection con = DatabaseConnection.databaseConnection();
+        Connection con = DatabaseConnection.getDatabaseConnection();
         PreparedStatement ps = con.prepareStatement("insert into subjects(subject_code,subject_evaluation_hours,subject_lab_hours,subject_lecture_hours_amount,subject_name,subject_offered_semester,subject_offered_year,subject_tutorial_hours)values(?,?,?,?,?,?,?,?)");
         ps.setString(1, subject.getSubjectCode());
         ps.setInt(2, subject.getEvaluationHours());
@@ -39,6 +39,6 @@ public class SubjectDaoImpl implements SubjectDao {
     }
 
     public ResultSet getAllSubjects() throws SQLException {
-        return CommonDaoImpl.getAllRecords(selectQuery);
+        return new CommonDaoImpl().getAllRecords(selectQuery);
     }
 }

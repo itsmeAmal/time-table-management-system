@@ -289,9 +289,9 @@ public class add_view_subjects extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        int selectedRow=tblSubjects.getSelectedRow();
-        int id=CommonController.getSelectedRowsid(selectedRow,tblSubjects);
-        new edit_dialog_subject(new javax.swing.JFrame(), true).setVisible(true);
+//        int selectedRow=tblSubjects.getSelectedRow();
+//        int id=CommonController.getSelectedRowsid(selectedRow,tblSubjects);
+//        new edit_dialog_subject(new javax.swing.JFrame(), true).setVisible(true);
         
     }//GEN-LAST:event_jButton4ActionPerformed
 

@@ -167,19 +167,19 @@ public class edit_dialog_tag extends javax.swing.JDialog {
     }
     
     private void showDetails() {
-        try {
-           
-            String condition=CommonConstants.equal;
-            Tag tag=TagController.getTagObjectByTagId(id,"tag_code", condition);
-            txtTagCode.setText(Integer.toString(tag.getTagCode()));
-            txtTagName.setText(tag.getTagName());
-            CommonController.loadDataToCombo(comboRelatedTag,"tag_related_name");
-            comboRelatedTag.setSelectedItem(tag.getRelatedTag());
-            
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(edit_dialog_tag.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//           
+////            String condition=CommonConstants.equal;
+//            Tag tag=TagController.getTagObjectByTagId(id,"tag_code", condition);
+//            txtTagCode.setText(Integer.toString(tag.getTagCode()));
+//            txtTagName.setText(tag.getTagName());
+////            CommonController.loadDataToCombo(comboRelatedTag,"tag_related_name");
+//            comboRelatedTag.setSelectedItem(tag.getRelatedTagName());
+//            
+//            
+//        } catch (SQLException ex) {
+//            Logger.getLogger(edit_dialog_tag.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
     }
     /**

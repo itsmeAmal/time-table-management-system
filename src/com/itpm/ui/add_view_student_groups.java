@@ -5,17 +5,114 @@
  */
 package com.itpm.ui;
 
+import com.itpm.controller.CommonController;
+import com.itpm.core.Validations;
+import com.itpm.dao.StudentGroupDao;
+import com.itpm.dao.impl.StudentGroupDaoImpl;
+import com.itpm.model.StudentGroup;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Anjula
  */
 public class add_view_student_groups extends javax.swing.JFrame {
 
+    int id;
+
     /**
      * Creates new form B
      */
     public add_view_student_groups() {
         initComponents();
+        loaddataToTable();
+    }
+
+    private void addStudentGroup() {
+        try {
+            StudentGroup studentgroup = new StudentGroup();
+            studentgroup.setGroupId(Validations.getIntOrZeroFromString(spinnerGroupNo.getValue().toString()));
+            studentgroup.setGroupNo(txtGroupIdString.getText().trim());
+            studentgroup.setSubGroupId(Validations.getIntOrZeroFromString(spinnerSubGroupNo.getValue().toString()));
+            studentgroup.setSubGroupNo(txtSubGroupIdString.getText().trim());
+            studentgroup.setAcademicYearAndSem(txtAcademicYrSem.getText().trim());
+            studentgroup.setProgram(comboProgram.getSelectedItem().toString());
+            boolean status = new StudentGroupDaoImpl().addStudentGroup(studentgroup);
+            if (status) {
+                JOptionPane.showMessageDialog(this, "Student Group created successfully !");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(add_view_student_groups.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void loaddataToTable() {
+        try {
+            ResultSet rset = new StudentGroupDaoImpl().getAllStudentGroups();
+            String columnList[] = {"student_id", "student_academic_year_and_sem", "student_programme", "student_group_no", "student_sub_group_no", "student_group_id", "student_sub_group_id"};
+            CommonController.loadDataToTable(tblStudentGroupDetails, rset, columnList);
+        } catch (SQLException ex) {
+            Logger.getLogger(add_view_student_groups.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void deleteStudentGroup() {
+        int selectedRaw = tblStudentGroupDetails.getSelectedRow();
+        if (selectedRaw != -1) {
+            try {
+                DefaultTableModel dtm = (DefaultTableModel) tblStudentGroupDetails.getModel();
+                int id = Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 0).toString());
+                new StudentGroupDaoImpl().deleteStudentGroup(id);
+            } catch (SQLException ex) {
+                Logger.getLogger(add_view_student_groups.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void cleardata() {
+        txtAcademicYrSem.setText("");
+        txtGroupIdString.setText("");
+        txtSubGroupIdString.setText("");
+        spinnerGroupNo.setValue(0);
+        spinnerSubGroupNo.setValue(0);
+        comboProgram.setSelectedIndex(0);
+    }
+
+    private void updateStudentGroup() {
+        int selectedRaw = tblStudentGroupDetails.getSelectedRow();
+        if (id != 0 && selectedRaw != -1) {
+            try {
+//                DefaultTableModel dtm = (DefaultTableModel) tblStudentGroupDetails.getModel();
+//                int id = Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 0).toString());
+//                txtAcademicYrSem.setText(dtm.getValueAt(selectedRaw, 1).toString());
+//                txtGroupIdString.setText(dtm.getValueAt(selectedRaw, 5).toString());
+//                txtSubGroupIdString.setText(dtm.getValueAt(selectedRaw, 6).toString());
+//                spinnerGroupNo.setValue(dtm.getValueAt(selectedRaw, 3).toString());
+//                spinnerSubGroupNo.setValue(dtm.getValueAt(selectedRaw, 1).toString());
+//                comboProgram.setSelectedItem(dtm.getValueAt(selectedRaw, 2).toString());
+
+                StudentGroup studentgroup = new StudentGroup();
+                studentgroup.setGroupId(Validations.getIntOrZeroFromString(spinnerGroupNo.getValue().toString()));
+                studentgroup.setGroupNo(txtGroupIdString.getText().trim());
+                studentgroup.setSubGroupId(Validations.getIntOrZeroFromString(spinnerSubGroupNo.getValue().toString()));
+                studentgroup.setSubGroupNo(txtSubGroupIdString.getText().trim());
+                studentgroup.setAcademicYearAndSem(txtAcademicYrSem.getText().trim());
+                studentgroup.setProgram(comboProgram.getSelectedItem().toString());
+                studentgroup.setStudentId(id);
+
+                boolean status = new StudentGroupDaoImpl().updateStudentGroup(studentgroup);
+                if (status) {
+                    JOptionPane.showMessageDialog(this, "Student Group updated successfully !");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(add_view_student_groups.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**
@@ -34,21 +131,20 @@ public class add_view_student_groups extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jSpinner1 = new javax.swing.JSpinner();
-        jSpinner2 = new javax.swing.JSpinner();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
+        txtAcademicYrSem = new javax.swing.JTextField();
+        comboProgram = new javax.swing.JComboBox<>();
+        spinnerGroupNo = new javax.swing.JSpinner();
+        spinnerSubGroupNo = new javax.swing.JSpinner();
+        txtSubGroupIdString = new javax.swing.JTextField();
+        txtGroupIdString = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblStudentGroupDetails = new javax.swing.JTable();
         jButton5 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Add/View  Student Gropus");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Manage Student Groups");
         setMaximumSize(new java.awt.Dimension(1368, 718));
         setMinimumSize(new java.awt.Dimension(1368, 718));
 
@@ -72,20 +168,31 @@ public class add_view_student_groups extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("Sub Group ID");
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txtAcademicYrSem.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        comboProgram.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        comboProgram.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Programme 1 ", "Programme 2", "Programme 3", "Programme 4", "Programme 5", "Programme 6", "Programme 7", " " }));
 
-        jSpinner1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        spinnerGroupNo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        jSpinner2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        spinnerSubGroupNo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        jTextField4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txtSubGroupIdString.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        jTextField5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txtGroupIdString.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txtGroupIdString.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtGroupIdStringActionPerformed(evt);
+            }
+        });
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton1.setText("SAVE");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton2.setText("UPDATE");
@@ -95,10 +202,7 @@ public class add_view_student_groups extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton3.setText("VIEW");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblStudentGroupDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -107,56 +211,72 @@ public class add_view_student_groups extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, true, false
+                false, false, false, false, false, true, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        tblStudentGroupDetails.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblStudentGroupDetailsMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblStudentGroupDetails);
+        if (tblStudentGroupDetails.getColumnModel().getColumnCount() > 0) {
+            tblStudentGroupDetails.getColumnModel().getColumn(0).setMinWidth(0);
+            tblStudentGroupDetails.getColumnModel().getColumn(0).setPreferredWidth(0);
+            tblStudentGroupDetails.getColumnModel().getColumn(0).setMaxWidth(0);
+        }
 
         jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton5.setText("CLEAR");
+        jButton5.setText("DELETE");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(28, 28, 28)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(28, 28, 28)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(22, 22, 22)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3))
-                            .addGap(91, 91, 91)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jTextField1)
-                                .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jSpinner1, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
-                            .addGap(51, 51, 51)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel6)
-                                .addComponent(jLabel4))
-                            .addGap(91, 91, 91)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jTextField5)
-                                .addComponent(jTextField4)
-                                .addComponent(jSpinner2, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1304, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel3))
+                                .addGap(91, 91, 91)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtAcademicYrSem)
+                                    .addComponent(comboProgram, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(spinnerGroupNo, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
+                                .addGap(51, 51, 51)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel4))
+                                .addGap(91, 91, 91)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtGroupIdString)
+                                    .addComponent(txtSubGroupIdString)
+                                    .addComponent(spinnerSubGroupNo, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1326, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,36 +286,35 @@ public class add_view_student_groups extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinner2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(spinnerSubGroupNo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(21, 21, 21)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtGroupIdString, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtSubGroupIdString, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtAcademicYrSem, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboProgram, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spinnerGroupNo, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
+                .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -214,8 +333,40 @@ public class add_view_student_groups extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new edit_dialog_student_group(new javax.swing.JFrame(), true).setVisible(true);
+        updateStudentGroup();
+        loaddataToTable();
+        cleardata();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        addStudentGroup();
+        loaddataToTable();
+        cleardata();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtGroupIdStringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGroupIdStringActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtGroupIdStringActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        deleteStudentGroup();
+        loaddataToTable();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void tblStudentGroupDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblStudentGroupDetailsMouseClicked
+        int selectedRaw = tblStudentGroupDetails.getSelectedRow();
+
+        if (selectedRaw != -1) {
+            DefaultTableModel dtm = (DefaultTableModel) tblStudentGroupDetails.getModel();
+            id = Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 0).toString());
+            txtAcademicYrSem.setText(dtm.getValueAt(selectedRaw, 1).toString());
+            txtGroupIdString.setText(dtm.getValueAt(selectedRaw, 3).toString());
+            txtSubGroupIdString.setText(dtm.getValueAt(selectedRaw, 4).toString());
+            spinnerGroupNo.setValue(Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 5).toString()));
+            spinnerSubGroupNo.setValue(Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 6).toString()));
+            comboProgram.setSelectedItem(dtm.getValueAt(selectedRaw, 2).toString());
+        }
+    }//GEN-LAST:event_tblStudentGroupDetailsMouseClicked
 
     /**
      * @param args the command line arguments
@@ -268,11 +419,10 @@ public class add_view_student_groups extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> comboProgram;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -281,11 +431,11 @@ public class add_view_student_groups extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JSpinner spinnerGroupNo;
+    private javax.swing.JSpinner spinnerSubGroupNo;
+    private javax.swing.JTable tblStudentGroupDetails;
+    private javax.swing.JTextField txtAcademicYrSem;
+    private javax.swing.JTextField txtGroupIdString;
+    private javax.swing.JTextField txtSubGroupIdString;
     // End of variables declaration//GEN-END:variables
 }

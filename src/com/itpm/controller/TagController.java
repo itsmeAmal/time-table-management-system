@@ -20,7 +20,7 @@ public class TagController {
         Tag tag=new Tag();
         tag.setTagCode(code);
         tag.setTagName(tagName);
-        tag.setRelatedTag(relatedTag);
+        tag.setRelatedTagName(relatedTag);
         return new TagDaoImpl().addTag(tag);
     }
     
@@ -32,7 +32,7 @@ public class TagController {
        Tag tag=new Tag();
        tag.setTagCode(code);
        tag.setTagName(tagName);
-       tag.setRelatedTag(relatedTag);
+       tag.setRelatedTagName(relatedTag);
        return new TagDaoImpl().updateTag(tag);
    } 
    
@@ -40,13 +40,13 @@ public class TagController {
        return new TagDaoImpl().deleteTag(code);
    }
    public static Tag  getTagObjectByTagId(int id,String attribute,String condition) throws SQLException{
-       ResultSet rs= new TagDaoImpl().getTagObjectByTagId(id,attribute,condition);
+//       ResultSet rs= new TagDaoImpl().getTagObjectByTagId(id,attribute,condition);
        Tag tag=new Tag();
-       while(rs.next()){
-       tag.setTagCode(rs.getInt("tag_code"));
-       tag.setTagName(rs.getString("tag_name"));
-       tag.setRelatedTag(rs.getString("tag_related_name"));
-       }
+//       while(rs.next()){
+//       tag.setTagCode(rs.getInt("tag_code"));
+//       tag.setTagName(rs.getString("tag_name"));
+//       tag.setRelatedTagName(rs.getString("tag_related_name"));
+//       }
        return tag;
    }
 }

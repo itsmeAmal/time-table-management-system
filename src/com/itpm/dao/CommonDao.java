@@ -5,10 +5,17 @@
  */
 package com.itpm.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  *
  * @author root_user
  */
 public interface CommonDao {
-    
+
+    public ResultSet getAllRecords(String selectQuery) throws SQLException;
+
+    public ResultSet getResultByAttribute(String selectQuery, String attribute, String condition, String value) throws SQLException;
+
 }
