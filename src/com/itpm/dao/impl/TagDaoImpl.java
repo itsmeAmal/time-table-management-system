@@ -24,7 +24,7 @@ public class TagDaoImpl {
 
         Connection con = DatabaseConnection.getDatabaseConnection();
         PreparedStatement ps = con.prepareStatement("insert into tags(tag_code,tag_name,tag_related_name) values (?,?,?)");
-        ps.setInt(1, tag.getTagCode());
+        ps.setString(1, tag.getTagCode());
         ps.setString(2, tag.getTagName());
         ps.setString(3, tag.getRelatedTagName());
         ps.executeUpdate();
@@ -39,10 +39,11 @@ public class TagDaoImpl {
 
     public boolean updateTag(Tag tag) throws SQLException {
         Connection con = DatabaseConnection.getDatabaseConnection();
-        PreparedStatement ps = con.prepareStatement("update tags set tag_name=?,tag_related_name=? where tag_code=? ");
+        PreparedStatement ps = con.prepareStatement("update tags set tag_name=?,tag_related_name=?, tag_code=? where tag_id=? ");
         ps.setString(1, tag.getTagName());
         ps.setString(2, tag.getRelatedTagName());
-        ps.setInt(3, tag.getTagCode());
+        ps.setString(3, tag.getTagCode());
+        ps.setInt(4, tag.getTagId());
         ps.executeUpdate();
         ps.close();
         return true;
@@ -50,7 +51,7 @@ public class TagDaoImpl {
 
     public boolean deleteTag(int id) throws SQLException {
         Connection con = DatabaseConnection.getDatabaseConnection();
-        PreparedStatement ps = con.prepareStatement("delete from tags where tag_code=?");
+        PreparedStatement ps = con.prepareStatement("delete from tags where tag_id=?");
         ps.setInt(1, id);
         ps.executeUpdate();
         ps.close();

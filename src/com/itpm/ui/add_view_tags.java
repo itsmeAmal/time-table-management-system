@@ -7,11 +7,13 @@ package com.itpm.ui;
 
 import com.itpm.controller.CommonController;
 import com.itpm.controller.TagController;
+import com.itpm.core.Validations;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,12 +21,76 @@ import javax.swing.JOptionPane;
  */
 public class add_view_tags extends javax.swing.JFrame {
 
+    int id;
+
     /**
      * Creates new form A
+     *
+     * @throws java.sql.SQLException
      */
     public add_view_tags() throws SQLException {
         initComponents();
-        showTableData();
+        loadDataToTable();
+    }
+
+    private void addTag() {
+
+        try {
+            if (txtTagCode.getText().trim() == null | txtTagCode.getText().trim().equalsIgnoreCase("")) {
+                JOptionPane.showMessageDialog(this, "Please Enter Tag Code", "Error !", JOptionPane.ERROR_MESSAGE);
+            }
+            if (txtTagName.getText().trim() == null || txtTagName.getText().trim().equalsIgnoreCase("")) {
+                JOptionPane.showMessageDialog(this, "Please Enter Tag Name", "Error !", JOptionPane.ERROR_MESSAGE);
+            }
+            if (comboRelatedTag.getSelectedItem().toString().trim() == null || comboRelatedTag.getSelectedItem().toString().trim().equalsIgnoreCase("")) {
+                JOptionPane.showMessageDialog(this, "Please select Related Tag Name", "Error !", JOptionPane.ERROR_MESSAGE);
+            }
+            boolean status = TagController.addTag(txtTagCode.getText().trim(), txtTagName.getText().trim(), comboRelatedTag.getSelectedItem().toString().trim());
+            clearTagDetail();
+            if (status) {
+                JOptionPane.showMessageDialog(this, "Tag added Successfully", "Sucess !", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(add_view_tags.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void deleteTag() {
+        int selectedRaw = tblTag.getSelectedRow();
+        if (selectedRaw != -1) {
+            try {
+                DefaultTableModel dtm = (DefaultTableModel) tblTag.getModel();
+                TagController.deleteTag(Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 0).toString()));
+            } catch (SQLException ex) {
+                Logger.getLogger(add_view_tags.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void clearTagDetail() {
+
+        txtTagCode.setText("");
+        txtTagName.setText("");
+        comboRelatedTag.setSelectedIndex(-1);
+    }
+
+    private void loadDataToTable() {
+        try {
+            ResultSet rs = TagController.getAllTags();
+            String[] columnList = {"tag_id", "tag_name", "tag_code", "tag_related_name"};
+            CommonController.loadDataToTable(tblTag, rs, columnList);
+        } catch (SQLException ex) {
+            Logger.getLogger(add_view_tags.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void updateTag() {
+        try {
+            TagController.updateTag(txtTagCode.getText().trim(), txtTagName.getText().trim(),
+                    comboRelatedTag.getSelectedItem().toString(), id);
+        } catch (SQLException ex) {
+            Logger.getLogger(add_view_tags.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -51,8 +117,8 @@ public class add_view_tags extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tag Management");
-        setMaximumSize(new java.awt.Dimension(639, 734));
-        setMinimumSize(new java.awt.Dimension(639, 734));
+        setMaximumSize(new java.awt.Dimension(639, 703));
+        setMinimumSize(new java.awt.Dimension(639, 703));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
@@ -76,7 +142,7 @@ public class add_view_tags extends javax.swing.JFrame {
         jLabel4.setText("Related Tag");
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/itpm/images/save-32.png"))); // NOI18N
+        jButton3.setText("SAVE");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -88,15 +154,23 @@ public class add_view_tags extends javax.swing.JFrame {
 
             },
             new String [] {
-                "", "Subject Code", "Subject Name", "Related Tag"
+                "id", "Tag Name", "Tag Code", "Related Tag"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblTag.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblTagMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                tblTagMouseEntered(evt);
             }
         });
         jScrollPane1.setViewportView(tblTag);
@@ -110,7 +184,7 @@ public class add_view_tags extends javax.swing.JFrame {
         }
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/itpm/images/edit-9-32.png"))); // NOI18N
+        jButton4.setText("UPDATE");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -118,7 +192,7 @@ public class add_view_tags extends javax.swing.JFrame {
         });
 
         jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/itpm/images/delete-32.png"))); // NOI18N
+        jButton5.setText("DELETE");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -134,26 +208,28 @@ public class add_view_tags extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtTagName))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(comboRelatedTag, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtTagCode, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtTagName))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(comboRelatedTag, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtTagCode, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -171,15 +247,15 @@ public class add_view_tags extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(comboRelatedTag, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(75, 75, 75)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -190,7 +266,9 @@ public class add_view_tags extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 1, Short.MAX_VALUE))
         );
 
         pack();
@@ -202,71 +280,36 @@ public class add_view_tags extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTagCodeActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
-//        int selectedTag = tblTag.getSelectedRow();
-//        int id= CommonController.getSelectedRowsid(selectedTag,tblTag);
-//        new edit_dialog_tag(this, true, id).setVisible(true);
-          // int id = Validations.getIntOrZeroFromString(tblCustomers.getValueAt(selectedItem, 0).toString( 
-    
+        updateTag();
+        loadDataToTable();
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         addTag();
-        
+        loadDataToTable();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         deleteTag();
+        loadDataToTable();
     }//GEN-LAST:event_jButton5ActionPerformed
-    
-    private void addTag(){
-    
-        try {
-            if(txtTagCode.getText().trim()==null|txtTagCode.getText().trim().equalsIgnoreCase("")){
-               JOptionPane.showMessageDialog(this,"Please Enter Tag Code","Error !", JOptionPane.ERROR_MESSAGE);
-            }
-            if(txtTagName.getText().trim()==null||txtTagName.getText().trim().equalsIgnoreCase("")){
-                JOptionPane.showMessageDialog(this, "Please Enter Tag Name","Error !",JOptionPane.ERROR_MESSAGE);
-            }
-            if(comboRelatedTag.getSelectedItem().toString().trim()==null||comboRelatedTag.getSelectedItem().toString().trim().equalsIgnoreCase("")){
-                JOptionPane.showMessageDialog(this,"Please select Related Tag Name","Error !",JOptionPane.ERROR_MESSAGE );
-            }
-            boolean status=TagController.addTag(Integer.parseInt(txtTagCode.getText().trim()),txtTagName.getText().trim(),comboRelatedTag.getSelectedItem().toString().trim());
-            if(status){
-                JOptionPane.showMessageDialog(this,"Tag added Successfully","Sucess !",JOptionPane.INFORMATION_MESSAGE);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(add_view_tags.class.getName()).log(Level.SEVERE, null, ex);
-        }   
-    }
-    
-    private void deleteTag(){
-        
-//        try {
-//            int id=CommonController.getSelectedRowsid(tblTag.getSelectedRow(),tblTag);
-//            boolean status= TagController.deleteTag(id);
-//            if(status){
-//                JOptionPane.showMessageDialog(this,"Tag Removed Successfully","Sucess !",JOptionPane.INFORMATION_MESSAGE);
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(add_view_tags.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-    }
-    private void clearTagDetail(){
-        
-        txtTagCode.setText("");
-        txtTagName.setText("");
-        comboRelatedTag.setSelectedIndex(-1);
-    }
-    
-    private void showTableData() throws SQLException{
-        
-        ResultSet rs=TagController.getAllTags();
-        String[] columnList={"tag_code","tag_name","tag_related_name"};
-        CommonController.loadDataToTable(tblTag,rs,columnList);
-        
-        
-    }
+
+    private void tblTagMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTagMouseClicked
+        int selectedRaw = tblTag.getSelectedRow();
+        if (selectedRaw != -1) {
+            DefaultTableModel dtm = (DefaultTableModel) tblTag.getModel();
+            id = Validations.getIntOrZeroFromString(dtm.getValueAt(selectedRaw, 0).toString());
+            txtTagCode.setText(dtm.getValueAt(selectedRaw, 2).toString());
+            txtTagName.setText(dtm.getValueAt(selectedRaw, 1).toString());
+            comboRelatedTag.setSelectedItem(dtm.getValueAt(selectedRaw, 3).toString());
+        }
+    }//GEN-LAST:event_tblTagMouseClicked
+
+    private void tblTagMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTagMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblTagMouseEntered
+
     /**
      * @param args the command line arguments
      */
@@ -360,13 +403,13 @@ public class add_view_tags extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
+
                 try {
                     new add_view_tags().setVisible(true);
                 } catch (SQLException ex) {
                     Logger.getLogger(add_view_tags.class.getName()).log(Level.SEVERE, null, ex);
                 }
-               
+
             }
         });
     }

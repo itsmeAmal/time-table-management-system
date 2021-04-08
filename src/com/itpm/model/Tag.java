@@ -11,15 +11,16 @@ package com.itpm.model;
  */
 public class Tag {
 
-    private int tagCode;
+    private int tagId;
+    private String tagCode;
     private String tagName;
     private String relatedTagName;
 
-    public int getTagCode() {
+    public String getTagCode() {
         return tagCode;
     }
 
-    public void setTagCode(int tagCode) {
+    public void setTagCode(String tagCode) {
         this.tagCode = tagCode;
     }
 
@@ -37,6 +38,20 @@ public class Tag {
 
     public void setRelatedTagName(String relatedTagName) {
         this.relatedTagName = relatedTagName;
+    }
+
+    /**
+     * @return the tagId
+     */
+    public int getTagId() {
+        return tagId;
+    }
+
+    /**
+     * @param tagId the tagId to set
+     */
+    public void setTagId(int tagId) {
+        this.tagId = tagId;
     }
 
 }
