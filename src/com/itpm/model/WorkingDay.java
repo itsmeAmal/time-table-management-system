@@ -13,11 +13,24 @@ import java.math.BigDecimal;
  */
 public class WorkingDay {
 
+    /*
+    working_day_id, working_day_no_work_days, working_day_hours, working_day_minutes, 
+    working_day_amount, working_day_monday, working_day_tuesday, working_day_wednesday, 
+    working_day_thursday, working_day_friday, working_day_saturday, working_day_sunday
+     */
     private int id;
-    private String dayName;
-    private int workingHours;
-    private int workingMinutes;
-    private BigDecimal workingDayAmountId;
+    private int noOfWorkingDays;
+    private int hours;
+    private int minutes;
+    private BigDecimal dayAmount;
+    private boolean monday;
+    private boolean tuesday;
+    private boolean wednesday;
+    private boolean thursday;
+    private boolean friday;
+    private boolean saturday;
+    private boolean sunday;
+    
 
     /**
      * @return the id
@@ -34,61 +47,161 @@ public class WorkingDay {
     }
 
     /**
-     * @return the dayName
+     * @return the noOfWorkingDays
      */
-    public String getDayName() {
-        return dayName;
+    public int getNoOfWorkingDays() {
+        return noOfWorkingDays;
     }
 
     /**
-     * @param dayName the dayName to set
+     * @param noOfWorkingDays the noOfWorkingDays to set
      */
-    public void setDayName(String dayName) {
-        this.dayName = dayName;
+    public void setNoOfWorkingDays(int noOfWorkingDays) {
+        this.noOfWorkingDays = noOfWorkingDays;
     }
 
     /**
-     * @return the workingHours
+     * @return the hours
      */
-    public int getWorkingHours() {
-        return workingHours;
+    public int getHours() {
+        return hours;
     }
 
     /**
-     * @param workingHours the workingHours to set
+     * @param hours the hours to set
      */
-    public void setWorkingHours(int workingHours) {
-        this.workingHours = workingHours;
+    public void setHours(int hours) {
+        this.hours = hours;
     }
 
     /**
-     * @return the workingMinutes
+     * @return the minutes
      */
-    public int getWorkingMinutes() {
-        return workingMinutes;
+    public int getMinutes() {
+        return minutes;
     }
 
     /**
-     * @param workingMinutes the workingMinutes to set
+     * @param minutes the minutes to set
      */
-    public void setWorkingMinutes(int workingMinutes) {
-        this.workingMinutes = workingMinutes;
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
     }
 
     /**
-     * @return the workingDayAmountId
+     * @return the dayAmount
      */
-    public BigDecimal getWorkingDayAmountId() {
-        return workingDayAmountId;
+    public BigDecimal getDayAmount() {
+        return dayAmount;
     }
 
     /**
-     * @param workingDayAmountId the workingDayAmountId to set
+     * @param dayAmount the dayAmount to set
      */
-    public void setWorkingDayAmountId(BigDecimal workingDayAmountId) {
-        this.workingDayAmountId = workingDayAmountId;
+    public void setDayAmount(BigDecimal dayAmount) {
+        this.dayAmount = dayAmount;
     }
-    
-    
+
+    /**
+     * @return the monday
+     */
+    public boolean isMonday() {
+        return monday;
+    }
+
+    /**
+     * @param monday the monday to set
+     */
+    public void setMonday(boolean monday) {
+        this.monday = monday;
+    }
+
+    /**
+     * @return the tuesday
+     */
+    public boolean isTuesday() {
+        return tuesday;
+    }
+
+    /**
+     * @param tuesday the tuesday to set
+     */
+    public void setTuesday(boolean tuesday) {
+        this.tuesday = tuesday;
+    }
+
+    /**
+     * @return the wednesday
+     */
+    public boolean isWednesday() {
+        return wednesday;
+    }
+
+    /**
+     * @param wednesday the wednesday to set
+     */
+    public void setWednesday(boolean wednesday) {
+        this.wednesday = wednesday;
+    }
+
+    /**
+     * @return the thursday
+     */
+    public boolean isThursday() {
+        return thursday;
+    }
+
+    /**
+     * @param thursday the thursday to set
+     */
+    public void setThursday(boolean thursday) {
+        this.thursday = thursday;
+    }
+
+    /**
+     * @return the friday
+     */
+    public boolean isFriday() {
+        return friday;
+    }
+
+    /**
+     * @param friday the friday to set
+     */
+    public void setFriday(boolean friday) {
+        this.friday = friday;
+    }
+
+    /**
+     * @return the saturday
+     */
+    public boolean isSaturday() {
+        return saturday;
+    }
+
+    /**
+     * @param saturday the saturday to set
+     */
+    public void setSaturday(boolean saturday) {
+        this.saturday = saturday;
+    }
+
+    /**
+     * @return the sunday
+     */
+    public boolean isSunday() {
+        return sunday;
+    }
+
+    /**
+     * @param sunday the sunday to set
+     */
+    public void setSunday(boolean sunday) {
+        this.sunday = sunday;
+    }
+
+    /**
+     * @return the days
+     */
 
 }

@@ -5,6 +5,13 @@
  */
 package com.itpm.ui;
 
+import com.itpm.core.Validations;
+import com.itpm.dao.impl.WorkingDayDaoImpl;
+import com.itpm.model.WorkingDay;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Anjula
@@ -16,6 +23,46 @@ public class add_view_working_days_hours extends javax.swing.JFrame {
      */
     public add_view_working_days_hours() {
         initComponents();
+        setValues();
+    }
+
+    private void setValues() {
+        try {
+            WorkingDay workingDay = new WorkingDayDaoImpl().getWorkingDayById(1);
+            spinnerWorkingDays.setValue(workingDay.getNoOfWorkingDays());
+            chkMonday.setSelected(workingDay.isMonday());
+            chkTuesday.setSelected(workingDay.isTuesday());
+            chkWednesday.setSelected(workingDay.isWednesday());
+            chkThursday.setSelected(workingDay.isThursday());
+            chkFriday.setSelected(workingDay.isFriday());
+            chkSaturday.setSelected(workingDay.isSaturday());
+            chkSunday.setSelected(workingDay.isSunday());
+            spinnerHoursPerDay.setValue(workingDay.getHours());
+            spinnerMinutesPerday.setValue(workingDay.getMinutes());
+            txtAmount.setText(workingDay.getDayAmount().toString());
+        } catch (SQLException ex) {
+            Logger.getLogger(add_view_working_days_hours.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void updateWornkgdaysAndHours() {
+        try {
+            WorkingDay workday = new WorkingDay();
+            workday.setDayAmount(Validations.getBigDecimalOrZeroFromString(txtAmount.getText().trim()));
+            workday.setNoOfWorkingDays(Validations.getIntOrZeroFromString(spinnerWorkingDays.getValue().toString()));
+            workday.setHours(Validations.getIntOrZeroFromString(spinnerHoursPerDay.getValue().toString()));
+            workday.setMinutes(Validations.getIntOrZeroFromString(spinnerMinutesPerday.getValue().toString()));
+            workday.setMonday(chkMonday.isSelected());
+            workday.setTuesday(chkTuesday.isSelected());
+            workday.setWednesday(chkWednesday.isSelected());
+            workday.setThursday(chkThursday.isSelected());
+            workday.setFriday(chkFriday.isSelected());
+            workday.setSaturday(chkSunday.isSelected());
+            workday.setSunday(chkSaturday.isSelected());
+            new WorkingDayDaoImpl().updateWorkingHoursAnddays(workday);
+        } catch (SQLException ex) {
+            Logger.getLogger(add_view_working_days_hours.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -33,182 +80,110 @@ public class add_view_working_days_hours extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jSpinner1 = new javax.swing.JSpinner();
-        jSpinner2 = new javax.swing.JSpinner();
-        jSpinner3 = new javax.swing.JSpinner();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jCheckBox6 = new javax.swing.JCheckBox();
-        jCheckBox7 = new javax.swing.JCheckBox();
-        jCheckBox8 = new javax.swing.JCheckBox();
+        btUpdate = new javax.swing.JButton();
+        spinnerWorkingDays = new javax.swing.JSpinner();
+        spinnerHoursPerDay = new javax.swing.JSpinner();
+        spinnerMinutesPerday = new javax.swing.JSpinner();
+        chkMonday = new javax.swing.JCheckBox();
+        chkWednesday = new javax.swing.JCheckBox();
+        chkTuesday = new javax.swing.JCheckBox();
+        chkFriday = new javax.swing.JCheckBox();
+        chkThursday = new javax.swing.JCheckBox();
+        chkSaturday = new javax.swing.JCheckBox();
+        chkSunday = new javax.swing.JCheckBox();
+        txtAmount = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Add/View Working Days and Hours");
-        setMaximumSize(new java.awt.Dimension(1368, 718));
-        setMinimumSize(new java.awt.Dimension(1368, 718));
+        setTitle("Manage Working Days And Hours");
+        setMaximumSize(new java.awt.Dimension(401, 626));
+        setMinimumSize(new java.awt.Dimension(401, 626));
+        setPreferredSize(new java.awt.Dimension(401, 626));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 153));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("No of Working Days");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 39, 152, 29));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("Working Days");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 109, 152, 31));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setText("Working Time Per Day");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, -1, 29));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setText("Hours");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(181, 394, 75, 29));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setText("Minutes");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(181, 434, 75, 29));
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton2.setText("Clear");
-
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton3.setText("Save");
-
-        jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton4.setText("Update");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btUpdate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btUpdate.setText("Update");
+        btUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btUpdateActionPerformed(evt);
             }
         });
+        jPanel1.add(btUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 550, 100, 40));
 
-        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton5.setText("View");
+        spinnerWorkingDays.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jPanel1.add(spinnerWorkingDays, new org.netbeans.lib.awtextra.AbsoluteConstraints(247, 39, 120, 29));
 
-        jSpinner1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        spinnerHoursPerDay.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jPanel1.add(spinnerHoursPerDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 394, 152, 29));
 
-        jSpinner2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        spinnerMinutesPerday.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jPanel1.add(spinnerMinutesPerday, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 434, 152, 29));
 
-        jSpinner3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        chkMonday.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        chkMonday.setText("Monday");
+        jPanel1.add(chkMonday, new org.netbeans.lib.awtextra.AbsoluteConstraints(247, 110, 120, 29));
 
-        jCheckBox2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jCheckBox2.setText("Monday");
-
-        jCheckBox3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jCheckBox3.setText("Wednesday");
-        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
+        chkWednesday.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        chkWednesday.setText("Wednesday");
+        chkWednesday.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox3ActionPerformed(evt);
+                chkWednesdayActionPerformed(evt);
             }
         });
+        jPanel1.add(chkWednesday, new org.netbeans.lib.awtextra.AbsoluteConstraints(247, 174, 120, 29));
 
-        jCheckBox4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jCheckBox4.setText("Tuesday");
+        chkTuesday.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        chkTuesday.setText("Tuesday");
+        jPanel1.add(chkTuesday, new org.netbeans.lib.awtextra.AbsoluteConstraints(247, 142, 120, 29));
 
-        jCheckBox5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jCheckBox5.setText("Friday");
-        jCheckBox5.addActionListener(new java.awt.event.ActionListener() {
+        chkFriday.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        chkFriday.setText("Friday");
+        chkFriday.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox5ActionPerformed(evt);
+                chkFridayActionPerformed(evt);
             }
         });
+        jPanel1.add(chkFriday, new org.netbeans.lib.awtextra.AbsoluteConstraints(247, 238, 120, 29));
 
-        jCheckBox6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jCheckBox6.setText("Thursday");
+        chkThursday.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        chkThursday.setText("Thursday");
+        jPanel1.add(chkThursday, new org.netbeans.lib.awtextra.AbsoluteConstraints(247, 206, 120, 29));
 
-        jCheckBox7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jCheckBox7.setText("Saturday");
+        chkSaturday.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        chkSaturday.setText("Saturday");
+        jPanel1.add(chkSaturday, new org.netbeans.lib.awtextra.AbsoluteConstraints(247, 270, 120, 29));
 
-        jCheckBox8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jCheckBox8.setText("Sunday");
+        chkSunday.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        chkSunday.setText("Sunday");
+        jPanel1.add(chkSunday, new org.netbeans.lib.awtextra.AbsoluteConstraints(247, 302, 120, 29));
+        jPanel1.add(txtAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 500, 240, 30));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(72, 72, 72)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jSpinner1, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
-                                .addComponent(jSpinner2))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jCheckBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(43, 43, 43)
-                                .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(28, 28, 28)
-                                .addComponent(jCheckBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(31, 31, 31)
-                                .addComponent(jCheckBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(85, 85, 85)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(80, 80, 80)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(77, 77, 77)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jCheckBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
-                        .addComponent(jCheckBox8, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox8, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(82, 82, 82)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(411, Short.MAX_VALUE))
-        );
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel6.setText("Amount");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 500, -1, 29));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -225,17 +200,18 @@ public class add_view_working_days_hours extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
+    private void chkWednesdayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkWednesdayActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox3ActionPerformed
+    }//GEN-LAST:event_chkWednesdayActionPerformed
 
-    private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
+    private void chkFridayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFridayActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox5ActionPerformed
+    }//GEN-LAST:event_chkFridayActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        new edit_dialog_working_hours(new javax.swing.JFrame(), true).setVisible(true);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void btUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUpdateActionPerformed
+        updateWornkgdaysAndHours();
+        setValues();
+    }//GEN-LAST:event_btUpdateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -304,25 +280,24 @@ public class add_view_working_days_hours extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JCheckBox jCheckBox6;
-    private javax.swing.JCheckBox jCheckBox7;
-    private javax.swing.JCheckBox jCheckBox8;
+    private javax.swing.JButton btUpdate;
+    private javax.swing.JCheckBox chkFriday;
+    private javax.swing.JCheckBox chkMonday;
+    private javax.swing.JCheckBox chkSaturday;
+    private javax.swing.JCheckBox chkSunday;
+    private javax.swing.JCheckBox chkThursday;
+    private javax.swing.JCheckBox chkTuesday;
+    private javax.swing.JCheckBox chkWednesday;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JSpinner jSpinner3;
+    private javax.swing.JSpinner spinnerHoursPerDay;
+    private javax.swing.JSpinner spinnerMinutesPerday;
+    private javax.swing.JSpinner spinnerWorkingDays;
+    private javax.swing.JTextField txtAmount;
     // End of variables declaration//GEN-END:variables
 }
